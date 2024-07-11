@@ -32,7 +32,7 @@ function Homepage({register}) {
 
 
   const handleClick=()=>setShow(!show)
-  
+
 
 //
   // const handleRegister = ()=>{
@@ -124,6 +124,7 @@ const submitHandler = async () => {
     toast.error('Registration failed');
   } 
 };
+
 
 
 
