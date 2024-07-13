@@ -4,6 +4,7 @@ import Homepage from './Pages/Homepage';
 import Chatpage from './Pages/Chatpage';
 
 
+
 function App() {
   return (
     <div className="App">
@@ -13,7 +14,6 @@ function App() {
         <Route path='/register' element={<Homepage register/>}/>
 
         <Route path='/chat' element={<Chatpage/>}/>
-
       </Routes>
     </div>
   );

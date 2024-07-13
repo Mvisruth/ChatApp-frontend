@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   MDBContainer,
   MDBRow,
@@ -18,6 +18,8 @@ import  {useNavigate} from 'react-router-dom';
 
 
 
+
+
 function Homepage({register}) {
   const RegisterForm = register?true:false
 
@@ -29,9 +31,12 @@ function Homepage({register}) {
   const [confirmpassword,setConfirmpassword]=useState()
   const [pic,setPic]=useState()
   const navigate = useNavigate();
-
-
   const handleClick=()=>setShow(!show)
+  
+
+  
+
+  
 
 
 //
@@ -169,7 +174,12 @@ const loginHandler =async()=>{
 }
 
 
+//chatProvider
 
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem('userInfo'));
+  if (user)navigate('/chat');
+}, [navigate]);
 
   return (
     
@@ -177,7 +187,7 @@ const loginHandler =async()=>{
           <MDBContainer fluid>
             
       
-            <MDBRow className='d-flex justify-content-center align-items-center h-100'>
+            <MDBRow className='Homepage-background d-flex justify-content-center align-items-center h-100 '>
               <MDBCol col='12'>
               <h1 className='text-center fs-1 text-white '>Chat Me</h1>
   

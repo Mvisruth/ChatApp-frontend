@@ -4,7 +4,7 @@
       font-family: "Rubik", sans-serif;
     
  }
- .App{
+ .Homepage-background{
     min-height: 100vh;
     display: flex;
     background-image:url("./267933960f566c4d6ed02bd55890f7c7.jpg") ;
@@ -14,3 +14,10 @@
 
  }
  
+ .Chatpage-background {
+   background-image: url('');
+   background-size: cover;
+   background-position: center;
+   height: 100vh;
+   width: 100%;
+ }
