@@ -30,6 +30,8 @@ export const ChatState = ()=>{
  return  useContext(ChatContext)
 }
 
+console.log(ChatState)
+
 
 
 export default ChatProvider;

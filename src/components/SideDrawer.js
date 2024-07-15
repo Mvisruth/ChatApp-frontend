@@ -5,6 +5,9 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import Avatar from '@mui/joy/Avatar';
+import { ChatState } from '../context/ProviderChat';
+
 
 
 function SideDrawer() {
@@ -18,6 +21,7 @@ function SideDrawer() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const {user} = ChatState()
 
   return (
     <div>
@@ -53,10 +57,31 @@ function SideDrawer() {
         aria-controls={open ? 'demo-positioned-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
       >
         <CircleNotificationsIcon className='fs-2'/>
       </Button>
+      <Menu
+        id="demo-positioned-menu"
+        aria-labelledby="demo-positioned-button"
+        anchorEl={anchorEl}
+        open={open}
+        anchorOrigin={{
+          vertical: 'top',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+        }}
+      >
+      </Menu>
+      {/* //profile */}
+      <Button
+        id="demo-positioned-button"
+        aria-controls={open ? 'demo-positioned-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+       <Avatar alt={user.name} src="" /></Button>
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
@@ -75,7 +100,7 @@ function SideDrawer() {
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleClose}>Logout</MenuItem>
-      </Menu>
+      </Menu> 
     </div>
       </Box>
     </div>
