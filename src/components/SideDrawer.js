@@ -1,4 +1,4 @@
-import { Box, Tooltip,Typography } from '@mui/material'
+import { Box, Divider, Tooltip,Typography } from '@mui/material'
 import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -7,6 +7,8 @@ import MenuItem from '@mui/material/MenuItem';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import Avatar from '@mui/joy/Avatar';
 import { ChatState } from '../context/ProviderChat';
+import { MenuDivider } from '@chakra-ui/react';
+import ProfileModel from './ProfileModel';
 
 
 
@@ -81,7 +83,7 @@ function SideDrawer() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-       <Avatar alt={user.name} src="" /></Button>
+       <Avatar alt={user.name} src={user.pic} /></Button>
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
@@ -97,8 +99,10 @@ function SideDrawer() {
           horizontal: 'left',
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <ProfileModel>
+        <MenuItem onClick={handleClose}>My profile</MenuItem>
+        </ProfileModel>
+        <Divider/>
         <MenuItem onClick={handleClose}>Logout</MenuItem>
       </Menu> 
     </div>
