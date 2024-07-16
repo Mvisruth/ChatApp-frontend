@@ -7,12 +7,19 @@ import MenuItem from '@mui/material/MenuItem';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import Avatar from '@mui/joy/Avatar';
 import { ChatState } from '../context/ProviderChat';
-import { MenuDivider } from '@chakra-ui/react';
 import ProfileModel from './ProfileModel';
-
-
-
+import { useNavigate } from 'react-router-dom';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import Drawer from '@mui/material/Drawer';
 function SideDrawer() {
+  const Navigate = useNavigate()
+
   const [search,setSearch]=useState("")
   const [searchResult,serSearchResult]=useState([])
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -25,8 +32,51 @@ function SideDrawer() {
   };
   const {user} = ChatState()
 
+  const logoutHandler =()=>{
+    localStorage.removeItem("userInfo")
+    Navigate('/')
+  }
+
+
+
+  const [Open, setOpen] = React.useState(false);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        {["Search Users"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              {/* <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon> */}
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
-    <div>
+    <>
       <Box
       display={"flex"}
       justifyContent={'space-between'}
@@ -38,7 +88,7 @@ function SideDrawer() {
       >
         <Tooltip title="Search Users to Chat" placement="top">
           <ButtonGroup variant="text" aria-label="Basic button group">
-            <Button className='text-dark'>
+            <Button className='text-dark' onClick={toggleDrawer(true)}>
               <i class="fa-solid fa-magnifying-glass"></i>
               <Typography
               sx={{
@@ -50,6 +100,9 @@ function SideDrawer() {
              search user
              </Typography>       
              </Button>
+             <Drawer open={Open} onClose={toggleDrawer(false)}>
+        {DrawerList}
+      </Drawer>
           </ButtonGroup>
        </Tooltip>
        <text className='fs-2 ' fontFamily='Work-sans'>ChatMe</text>
@@ -99,15 +152,18 @@ function SideDrawer() {
           horizontal: 'left',
         }}
       >
-        <ProfileModel>
-        <MenuItem onClick={handleClose}>My profile</MenuItem>
+        <ProfileModel user={user}>
+        {/* <MenuItem onClick={handleClose}>My profile</MenuItem>    */}
         </ProfileModel>
         <Divider/>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={logoutHandler}>Logout</MenuItem>
       </Menu> 
     </div>
       </Box>
-    </div>
+
+      
+
+    </>
     
   )
 }
