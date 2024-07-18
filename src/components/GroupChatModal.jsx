@@ -5,6 +5,8 @@ import Modal from 'react-bootstrap/Modal';
 import { ChatState } from '../context/ProviderChat';
 import { FormControl} from 'react-bootstrap';
 import {  Form } from 'react-bootstrap';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 function GroupChatModal({children}) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -17,7 +19,29 @@ function GroupChatModal({children}) {
     const {user,chats,setChat} = ChatState
     console.log(GroupChatName)
 
-    const handleSearch = () => {
+    const handleSearch = async(query) => {
+    
+        setSearch(query)
+        if(!query){
+            return
+        }
+        try {
+            setLoading(true)
+            const config={
+                header:{
+                    Authorization:`Bearer${user.token}`,          
+                }
+            }
+            const {data} = await axios.get(`/api/user?search${search}`,config)
+            setLoading(true)
+            setSearchResult(data)
+        } catch (error) {
+            toast.warning("error occured")
+            
+        }
+    }
+  
+    const handleSubmit = () => {
 
     }
 
@@ -56,8 +80,8 @@ function GroupChatModal({children}) {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleClose}>
-          Save Changes
+        <Button variant="primary" onClick={handleSubmit}>
+          Create Chat
         </Button>
       </Modal.Footer>
     </Modal>
