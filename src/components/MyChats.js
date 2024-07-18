@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ChatLoading from './ChatLoading';
 import { getSender } from '../Config/ChatLogic';
 import {Button} from 'react-bootstrap';
+import GroupChatModal from './GroupChatModal';
 
 
 function MyChats() {
@@ -46,27 +47,31 @@ function MyChats() {
       alignItems='center'
       bgcolor='white'
       w={"100%"}// 
+      height={'520px'}
+      marginTop={5}
       borderRadius='16px'
       borderWidth='4px'
       p={2}
-      boxShadow={3}
+      boxShadow={5} 
 
     >
       <Box
         paddingBottom={3}
-        // className='fs-'
+        // className='fs-1'
         borderRadius='lg'
-        fontSize={{ base : '28px', md: '30px', xs:""}}
+        fontSize={{ base : '28px', md: '30px', xs:"12px"}}
         fontFamily='Work sans'
         display='flex'
         w={'100%'}
         justifyContent='space-between'
         alignItems='center'      
         p={2}
+        maxHeight={"100px"}
        
       >
         My Chats
-        <Button
+        <GroupChatModal>
+        <Button 
           display='flex'
           className='ms-3 btn btn-success'
           fontSize={{ base : '17px', md: '10px', lg: '17px',xs:"" }}
@@ -74,6 +79,7 @@ function MyChats() {
         >
           New Group Chat
         </Button>
+        </GroupChatModal>
       </Box> 
 
       <Box
@@ -86,8 +92,8 @@ function MyChats() {
         paddingRight={2}
         borderRadius='16px'
         overflowY='hidden'
-        maxHeight='70vh'
-        // borderRadius={"16px"}
+        maxHeight='50vh'
+        
       >
         {chat ? (
           <Stack spacing={2} sx={{ overflowY:'scroll' }}>
@@ -103,7 +109,7 @@ function MyChats() {
                   key={chat._id}
                   paddingLeft={3}
                   p={2}
-                //  border={3} 
+                 border={3} 
   
                 >
                   <Typography className=''>
