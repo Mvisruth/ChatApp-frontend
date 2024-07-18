@@ -1,112 +1,126 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
+import axios from 'axios';
+import React, { useEffect, useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import { ChatState } from '../context/ProviderChat';
-import { Box } from '@mui/material';
-// import { Button } from 'react-bootstrap';
+import { Box, Typography, Stack} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Button } from '@mui/material';
 import ChatLoading from './ChatLoading';
-import { Stack } from 'react-bootstrap';
-
-
+import { getSender } from '../Config/ChatLogic';
+import {Button} from 'react-bootstrap';
 
 
 function MyChats() {
-  const [loggedUser,setLoggedUser]=useState()
-  const {selectedChat,user,setSelectChat,chat,setChat} = ChatState()
+  const [loggedUser, setLoggedUser] = useState(null);
+  const { selectedChat, user, setSelectedChat, chat, setChat } = ChatState();
 
-  const fetchChat = async()=>{
+  const fetchChat = useCallback(async () => {
+    if (user) return;
     try {
-      const config={
-        headers:{
-          Authorization:`Bearer ${user.token}`,
-        }
-      }
-      const {data} = await axios.get("/api/chat",config)
-      setChat(data)
-    } catch (error) {
-      toast.error("error occured")
-      
-    }
-  }
-  useEffect(()=>{
-    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")))
-    fetchChat()
-  },[])
-  
-  return (
-    <Box
-    sx={{
-      display: { xs: selectedChat ? 'none' : 'flex', md: 'flex' },
-      flexDirection: 'column',
-      alignItems: 'center',
-      p: 3,
-      bgcolor: 'white',
-      width: { xs: '100%', md: '31%' },
-      height:{xs:"600px"},
-      borderRadius: 'lg',
-      borderWidth: '1px',
-      borderColor: 'grey.300',
-      boxSizing: 'border-box',
-    }}
-  >
-        <Box
-      sx={{
-        pb: 3,
-        px: 3,
-        fontSize: { xs: '28px', md: '30px' },
-        fontFamily: 'Work Sans',
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      My Chat
-      <Button
-      
-      
-      sx={{
-        display: 'flex',
-        fontSize: { xs: '17px', md:'10px', lg:'17px' },
-        backgroundColor: 'green',
-        color: 'white',
-        '&:hover': {
-          backgroundColor: 'darkgreen',
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
         },
-      }}
-      endIcon={<AddIcon/>}>
-      New Group Chat
-    </Button>
+      };
+      const { data } = await axios.get("/api/chat", config);
+      console.log("Fetched chats:", data); // Debug log
+      setChat(data);
+    } catch (error) {
+      toast.error("Error occurred while fetching chats");
+    }
+  }, [user, setChat]);
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    setLoggedUser(userInfo);
+    fetchChat();
+  }, []);
+
+  if (!loggedUser || !chat) {
+    return <ChatLoading />; // Add a loading state
+  }
+
+  return (
+    <Box className="ms-3"
+      display={{ base : selectedChat ? 'none' : 'flex', md: 'flex' }}
+      flexDirection='column'
+      alignItems='center'
+      bgcolor='white'
+      w={"100%"}// 
+      borderRadius='16px'
+      borderWidth='4px'
+      p={2}
+      boxShadow={3}
+
+    >
+      <Box
+        paddingBottom={3}
+        // className='fs-'
+        borderRadius='lg'
+        fontSize={{ base : '28px', md: '30px', xs:""}}
+        fontFamily='Work sans'
+        display='flex'
+        w={'100%'}
+        justifyContent='space-between'
+        alignItems='center'      
+        p={2}
+       
+      >
+        My Chats
+        <Button
+          display='flex'
+          className='ms-3 btn btn-success'
+          fontSize={{ base : '17px', md: '10px', lg: '17px',xs:"" }}
+          endIcon={<AddIcon />}
+        >
+          New Group Chat
+        </Button>
+      </Box> 
+
+      <Box
+        display='flex'
+        flexDirection='column' 
+        padding={3}
+        bgcolor='#F8F8F8'
+        width='100%'
+        paddingLeft={3}
+        paddingRight={2}
+        borderRadius='16px'
+        overflowY='hidden'
+        maxHeight='70vh'
+        // borderRadius={"16px"}
+      >
+        {chat ? (
+          <Stack spacing={2} sx={{ overflowY:'scroll' }}>
+            {chat.map((chat) => {
+              console.log("Rendering chat item:", chat); // Debug log
+              return (
+                <Box
+                  onClick={() =>setSelectedChat(chat)}
+                  cursor='pointer'
+                  bgcolor={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+                  color={selectedChat === chat ? "white" : "black"}
+                  borderRadius='12px'
+                  key={chat._id}
+                  paddingLeft={3}
+                  p={2}
+                //  border={3} 
+  
+                >
+                  <Typography className=''>
+                    {!chat.isGroupChat?(
+                     getSender(loggedUser,chat.users)
+                    ):chat.ChatName}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Stack>
+        ) : (
+          <ChatLoading />
+        )}
+      </Box>
     </Box>
-
-   <Box
-   d={"flex"}
-   flexDirection={"column"}
-   p={3}
-   bg="#F8F8F8"
-   w="100%"
-   h={"100%"}
-   borderRadius={"lg"}
-   overflow={"hidden"}
-   >
-    {chat?(
-      <Stack overflow='scroll'> 
-         {chat.map((chat)=>{
-          <Box>
-            
-          </Box>
-         })}
-      </Stack>
-
-    ):(
-      <ChatLoading/>
-    )}
-   </Box>
-
-  </Box>
-  )
+  );
 }
 
-export default MyChats
+export default MyChats;

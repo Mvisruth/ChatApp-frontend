@@ -6,7 +6,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Image } from 'react-bootstrap';
-
 const ProfileModel = ({user,children}) => {
 
     // const [isOpen,onOpen,onClose] =React.useState(false);

@@ -16,8 +16,8 @@ function Chatpage() {
 <Box
 display={"flex"}
 justifyContent={'space-between'}
-w={"100%"}
-h={'91.5vh%'}
+width={"100%"}
+height={'91.5vh'}
 p={"10px"}
 >
   {user && <MyChats/>}

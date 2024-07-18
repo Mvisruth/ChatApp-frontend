@@ -79,7 +79,7 @@ function SideDrawer() {
       setSearchResult(data)
     }catch(err){
       toast.error('faild to load search');
-
+      setLoading(false)
  
     }
   }
@@ -95,7 +95,8 @@ function SideDrawer() {
       }
       const {data} = await axios.post('/api/chat',{userId},config)
 
-      if(!chat.find((c)=>c._id === data._id)) setChat([data,...chat])
+      if(!chat.find((c)=>c._id === data._id)) setChat([data,...chat]);
+      console.log(data)
       setSelectedChat(data)
       setloadingChat(false)
       toggleDrawer(false)(); // Close the drawer

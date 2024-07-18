@@ -6,12 +6,12 @@ function ChatLoading() {
   return (
 
     <Stack  >
-     <Skeleton animation={false}  />
-     <Skeleton animation={false} />
-     <Skeleton animation={false} />
-     <Skeleton animation={false} />
-     <Skeleton animation={false} />
-     <Skeleton animation={false} />
+     <Skeleton animation={false} height={'45px'}  />
+     <Skeleton animation={false} height={'45px'}  />
+     <Skeleton animation={false} height={'45px'}  />
+     <Skeleton animation={false} height={'45px'}  />
+     <Skeleton animation={false}  height={'45px'} />
+     <Skeleton animation={false} height={'45px'}  />
 
 
     </Stack>
