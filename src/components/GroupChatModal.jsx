@@ -5,8 +5,12 @@ import Modal from 'react-bootstrap/Modal';
 import { ChatState } from '../context/ProviderChat';
 import {  Form } from 'react-bootstrap';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast} from 'react-toastify';
 import UserList from './UserList';
+import { Box } from '@mui/material';
+import UserBadgeItem from './UserBadgeItem';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function GroupChatModal({children}) {
     const [show, setShow] = useState(false);
@@ -43,12 +47,51 @@ function GroupChatModal({children}) {
         }
     } 
   
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
+        
+      if(!GroupChatName || !selectedUsers.length===0)
+      {
+        toast.warning("please fill the field")
+        return
+      }
+      try {
 
+         const config = {
+                headers:{
+                    Authorization:`Bearer ${user.token}`,          
+                },
+            }
+            const {data}= await axios.post('/api/chat/group',
+              {
+              name:GroupChatName,
+              users:JSON.stringify(selectedUsers.map((u) => u._id))
+            },
+            config
+          )
+          setChat([data, ...chat])   
+          handleClose();
+          toast.success("New Group Chat Created", {
+              autoClose: 2000,
+              position: "top-center",
+          });
+      } catch (error) {
+        toast.error('Faild to Create Chat',error)
+        console.log(error)
+        
+      }
+    }
+
+    const handleDelete = (delUser) => {
+      setSelectedUsers(
+        selectedUsers.filter((sel)=>sel._id !== delUser._id))
     }
     
-    const handleGroup = () => {
-
+    const handleGroup = (userToAdd) => {
+          if(selectedUsers.includes(userToAdd)){
+            toast.warning("User Already Added")
+            return
+          }
+          setSelectedUsers([...selectedUsers,userToAdd])
     }
 
   return (
@@ -78,11 +121,18 @@ function GroupChatModal({children}) {
           </Form.Group>
           
      </Form>
-     {/* seleted users */}
+    <Box w="100%" display={"flex"} flexWrap={"wrap"}>
+       {selectedUsers.map((u)=>(
+        <UserBadgeItem key={user._id} user={u}
+        handleFunction={()=>handleDelete(u)}
+        
+        />
+       ))}
+    </Box>
      
   <div className='mt-3'>
       {loading ?(<div>loading</div>):(
-       searchResult ?.slice(0,4).map((user)=>(
+       searchResult?.slice(0,4).map((user)=>(
           <UserList
           key={user._id} 
           user={user} 
@@ -102,7 +152,9 @@ function GroupChatModal({children}) {
         </Button>
       </Modal.Footer>
     </Modal>
+
   </>
+  
   )
 }
 

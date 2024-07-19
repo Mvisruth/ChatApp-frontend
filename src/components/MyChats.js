@@ -98,10 +98,10 @@ function MyChats() {
         {chat ? (
           <Stack spacing={2} sx={{ overflowY:'scroll' }}>
             {chat.map((chat) => {
-              console.log("Rendering chat item:", chat); // Debug log
+              console.log("Rendering chat item:",chat); // Debug log
               return (
                 <Box
-                  onClick={() =>setSelectedChat(chat)}
+                  onClick={()=>setSelectedChat(chat)}
                   cursor='pointer'
                   bgcolor={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                   color={selectedChat === chat ? "white" : "black"}
@@ -109,13 +109,11 @@ function MyChats() {
                   key={chat._id}
                   paddingLeft={3}
                   p={2}
-                 border={3} 
-  
                 >
-                  <Typography className=''>
+                  <Typography fontSize="small" className=''>
                     {!chat.isGroupChat?(
                      getSender(loggedUser,chat.users)
-                    ):chat.ChatName}
+                    ):chat.chatName}
                   </Typography>
                 </Box>
               );
