@@ -18,4 +18,16 @@
     background: #555;
 }
 
+.custom-modal .modal-dialog {
+    max-width: 600px;
+}
 
+.custom-modal .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.custom-modal .modal-body {
+    max-height: calc(80vh - 150px);
+    overflow-y: auto;
+}

@@ -3,10 +3,11 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { ChatState } from '../context/ProviderChat';
-import { FormControl} from 'react-bootstrap';
 import {  Form } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import UserList from './UserList';
+
 function GroupChatModal({children}) {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -16,8 +17,7 @@ function GroupChatModal({children}) {
     const [search,setSearch]=useState([])
     const [searchResult,setSearchResult]=useState([])
     const [loading,setLoading]=useState([])
-    const {user,chats,setChat} = ChatState
-    console.log(GroupChatName)
+    const {user,chat,setChat} = ChatState()
 
     const handleSearch = async(query) => {
     
@@ -27,22 +27,27 @@ function GroupChatModal({children}) {
         }
         try {
             setLoading(true)
-            const config={
-                header:{
-                    Authorization:`Bearer${user.token}`,          
-                }
+            const config = {
+                headers:{
+                    Authorization:`Bearer ${user.token}`,          
+                },
             }
-            const {data} = await axios.get(`/api/user?search${search}`,config)
+            const {data} = await axios.get(`/api/user?search=${search}`,config)
             console.log(data)
-            setLoading(true)
+            setLoading(false)
             setSearchResult(data)
         } catch (error) {
             toast.warning("error occured")
+            console.log(error)
             
         }
-    }
+    } 
   
     const handleSubmit = () => {
+
+    }
+    
+    const handleGroup = () => {
 
     }
 
@@ -54,7 +59,7 @@ function GroupChatModal({children}) {
       {children}
     </span>
 
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
       <Modal.Header closeButton>
         <Modal.Title>Create Group Chat</Modal.Title>
       </Modal.Header>
@@ -74,8 +79,19 @@ function GroupChatModal({children}) {
           
      </Form>
      {/* seleted users */}
-     {/* render searched users */}
-      </Modal.Body>
+     
+  <div className='mt-3'>
+      {loading ?(<div>loading</div>):(
+       searchResult ?.slice(0,4).map((user)=>(
+          <UserList
+          key={user._id} 
+          user={user} 
+          handleFunction={()=>handleGroup(user)}
+          />
+        ))
+       )}
+  </div>
+    </Modal.Body>
       
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
