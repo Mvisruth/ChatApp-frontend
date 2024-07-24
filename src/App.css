@@ -31,3 +31,10 @@
     max-height: calc(80vh - 150px);
     overflow-y: auto;
 }
+
+.message{
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}

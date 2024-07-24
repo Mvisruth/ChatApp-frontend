@@ -20,13 +20,14 @@ const ChatProvider =({children})=>{
 
    if(!userInfo)
     {
-        navigate('/')
+        navigate('/') 
     }
     },[navigate])
+   
 
    return(<ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat,chat,setChat}}>{children}</ChatContext.Provider>
    );
-};
+}; 
 
 export const ChatState = ()=>{
  return  useContext(ChatContext)
