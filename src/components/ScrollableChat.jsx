@@ -1,6 +1,6 @@
 import React from 'react'
 import ScrollableFeed from 'react-scrollable-feed'
-import { isLastMessage, isSameSender } from '../Config/ChatLogic'
+import { isLastMessage, isSameSender, isSameSenderMargin } from '../Config/ChatLogic'
 import { ChatState } from '../context/ProviderChat'
 import { Tooltip } from '@mui/material'
 import { Avatar } from '@mui/joy'
@@ -18,8 +18,7 @@ function ScrollableChat({message}) {
               <Tooltip title={m.sender.name} placement='bottom-start'>
                 <Avatar
                   alt={m.sender.name}
-                  src={m.sender.pic || 'https://via.placeholder.com/50'}  // Fallback to placeholder image
-                  style={{ marginRight: 8, width: '50px', height: '50px' }}  // Ensure size is appropriate
+                  src={m.sender.pic }
                 />
               </Tooltip>
             )}
@@ -30,8 +29,9 @@ function ScrollableChat({message}) {
                 padding: "5px 15px",
                 maxWidth: "75%",
                 wordBreak: "break-word",  // Ensure long words break correctly
-                display: "inline-block"  // Ensure the span wraps the text
-              }}
+                display: "inline-block",  // Ensure the span wraps the text
+                marginLeft:isSameSenderMargin(message,m,i,user._id)
+            }}
             >
               {m.content}
             </span>

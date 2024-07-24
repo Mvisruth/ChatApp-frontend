@@ -107,7 +107,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
             display="flex"
             flexDirection="column"
             justifyContent="flex-end"
-            alignItems="center"
+            // alignItems="center"
             p={3}
             bgcolor="#E8E8E8"
             width="100%"
