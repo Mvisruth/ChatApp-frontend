@@ -111,17 +111,21 @@ function Homepage({ register }) {
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       setTimeout(() => {
         navigate('/chat');
+        
       }, 3000);
     } catch (error) {
       console.error('Login error:', error);
       toast.error('Login failed');
     }
   };
-
+///navigate function to condition render
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('userInfo'));
-    if (user) navigate('/chat');
+    if (!user) navigate('/register');
   }, [navigate]);
+
+
+  
 
   return (
     <>

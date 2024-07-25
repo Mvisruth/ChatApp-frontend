@@ -10,10 +10,10 @@ const ChatProvider =({children})=>{
     const [selectedChat,setSelectedChat]=useState()
     const [chat,setChat]=useState([])
     const navigate = useNavigate()
-
+   const [notification,setNotification]=useState([])
 
     
-
+//navigate function to condition render
     useEffect(()=>{
    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
    setUser(userInfo)
@@ -23,9 +23,11 @@ const ChatProvider =({children})=>{
         navigate('/') 
     }
     },[navigate])
+///register
+    
    
 
-   return(<ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat,chat,setChat}}>{children}</ChatContext.Provider>
+   return(<ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat,chat,setChat,notification,setNotification}}>{children}</ChatContext.Provider>
    );
 }; 
 

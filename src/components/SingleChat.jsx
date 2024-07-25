@@ -24,7 +24,7 @@ var socket,selectedChatCompare
 
 
 function SingleChat({ fetchAgain, setFetchAgain }) {
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const { user, selectedChat, setSelectedChat,notification,setNotification } = ChatState();
   const [message, setMessage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -88,10 +88,18 @@ useEffect(()=>{
     selectedChatCompare= selectedChat;
   }, [selectedChat]);
 
+  console.log(notification,"-------------")
+
   useEffect(()=>{
   socket.on('message received',(newMessageRecieved)=>{
     if(!selectedChatCompare|| selectedChatCompare._id !== newMessageRecieved.chat._id){
-      //give notification
+     //give notification
+      {
+        if(!notification.includes(newMessageRecieved)){
+          setNotification([newMessageRecieved,...notification])
+          setFetchAgain(!fetchAgain)
+        }
+      }
     }else{
       setMessage([...message,newMessageRecieved])
     }
@@ -174,7 +182,7 @@ useEffect(()=>{
             {!selectedChat.isGroupChat ? (
               <>
                 {getSender(user, selectedChat.users)}
-                <ProfileModel user={getSender(user, selectedChat.users)} />
+                {/* <ProfileModel user={getSender(user, selectedChat.users)} /> */}
               </>
             ) : (
               <>
