@@ -28,8 +28,8 @@ function ScrollableChat({message}) {
                 borderRadius: "20px",
                 padding: "5px 15px",
                 maxWidth: "75%",
-                wordBreak: "break-word",  // Ensure long words break correctly
-                display: "inline-block",  // Ensure the span wraps the text
+                wordBreak: "break-word",
+                display: "inline-block",
                 marginLeft:isSameSenderMargin(message,m,i,user._id)
             }}
             >
