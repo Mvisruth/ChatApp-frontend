@@ -12,6 +12,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ScrollableChat from './ScrollableChat';
 import { io } from 'socket.io-client';
+import Lottie from 'react-lottie';
+import { Loop } from '@mui/icons-material';
+import animationData from './animation/typing.json'
 //seckot
 
 const ENDPOINT = "http://127.0.0.1:5000"
@@ -28,6 +31,20 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   const [socketConnected,setSocketConnected]=useState()
   const [typing,setTyping]=useState(false)
   const [istyping,setIsTyping]=useState(false)
+
+
+ const defaultOption = {
+  Loop:true,
+  autoplay:true,
+  animationData:animationData,
+  rendererSettings:{
+    preserveAspection:"xMidYMid slice"
+  }
+
+ }
+
+
+
   const fetchMessages = async () => {
     if (!selectedChat) return;
 
@@ -56,7 +73,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
 useEffect(()=>{
   socket = io(ENDPOINT)
   socket.emit("setup",user)
-  socket.on('connection',()=>setSocketConnected(true));
+  socket.on('connected',()=>setSocketConnected(true));
   socket.on('typing',()=>setIsTyping(true))
   socket.on('stop typing',()=>setIsTyping(false))
 
@@ -83,6 +100,8 @@ useEffect(()=>{
 
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
+     socket.emit('stop typing',selectedChat._id)
+
       try {
         const config = {
           headers: {
@@ -112,6 +131,26 @@ useEffect(()=>{
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
+
+  if(!socketConnected) return
+
+  if(!typing){
+    setTyping(true)
+    socket.emit('typing',selectedChat._id)
+  }
+  let lastTypingtime = new Date().getTime();
+  var timerLength = 3000
+
+  setTimeout(()=>{
+   var timeNow = new Date().getTime();
+   var timeDiff = timeNow - lastTypingtime;
+
+   if(timeDiff >= timerLength && typing){
+    socket.emit("stop typing",selectedChat._id);
+    setTyping(false)
+   }
+  },timerLength)
+
   }
 
   return (
@@ -172,6 +211,13 @@ useEffect(()=>{
             )}
 
             <InputGroup className="mt-4">
+              {istyping? <div>
+                <Lottie
+                options={defaultOption}
+                width={50}
+                style={{marginBottom:15 , marginLeft:0}}
+                />
+              </div>:""}
               <Form.Control
                 onKeyDown={sendMessage} 
                 isRequired 
